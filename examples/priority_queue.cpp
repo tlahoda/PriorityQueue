@@ -30,7 +30,7 @@ int main (int argc, char** argv) {
   using namespace std;
   using namespace data;
 
-  PriorityQueue<string, Min> queue;
+  MinPriorityQueue<string> queue;
   queue.push ("30", "3");
   queue.push ("20", "2a");
   queue.push ("600", "6c");

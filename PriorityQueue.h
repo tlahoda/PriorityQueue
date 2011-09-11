@@ -1,6 +1,6 @@
 /**
- * \file PriorityQueue.h, Contains a priority queue implemented using a LSD radix
- * sort. 
+ * \file PriorityQueue.h, Contains a bi-directional priority queue implemented
+ * using a LSD radix sort. 
  *
  * Due to the way C++ does its data structures pop performs in constant time and
  * push has a worse case performance of O(2*log (k*Np)) where k is the maximum
@@ -75,7 +75,7 @@ namespace data {
     static typename T::iterator getIter (T& t) {
       return t.begin ();
     };
-  };
+  }; //Min
 
   /**
    * \struct Max
@@ -107,7 +107,7 @@ namespace data {
     static typename T::iterator getIter (T& t) {
       return --t.end ();
     };
-  };
+  }; //Max
 
   /**
    * \struct PriorityQueue
@@ -133,11 +133,11 @@ namespace data {
     /**
      * Constructs a PriorityQueue. This is a constant time operation.
      */
-    PriorityQueue () : buckets_ (), size_ (0), curMaxDigitsBucket_ (), curMaxPriorityBucket_ (), curMax_ () {};
+    PriorityQueue () : buckets_ (), size_ (0), curDigitsBucket_ (), curPriorityBucket_ (), curHighest_ () {};
 
     /**
      * Destroys a PriorityQueue. The will be a linear time operation based on the
-     * numebr of elements in the queue.
+     * number of elements in the queue.
      */
     ~PriorityQueue () {};
 
@@ -147,6 +147,9 @@ namespace data {
      * of the set of priorities having the same number of digits as the priority
      * being pushed. In some case this could perform O(2*log k*Np) to be more
      * precise.
+     *
+     * Any issue with construction cost of the maps or the list could be
+     * alleviated by caching the maps instead of destroying them.
      *
      * \param priority The priority of the element.
      * \param t The element to insert.
@@ -165,10 +168,10 @@ namespace data {
 
       priorityBucket->second.push_back (t);
 
-      if (size_ == 0 || DIRECTION::compare (priority, *curMax_)) {
-        curMaxDigitsBucket_ = digitsBucket;
-        curMaxPriorityBucket_ = priorityBucket;
-        curMax_ = priorityBucket->second.begin ();
+      if (size_ == 0 || DIRECTION::compare (priority, *curHighest_)) {
+        curDigitsBucket_ = digitsBucket;
+        curPriorityBucket_ = priorityBucket;
+        curHighest_ = priorityBucket->second.begin ();
       }
       ++size_;
     };
@@ -183,19 +186,19 @@ namespace data {
     T pop () {
       if (size_ == 0) throw runtime_error ("Priority queue is empty.");
 
-      T t = *curMax_;
-      curMaxPriorityBucket_->second.erase (curMax_);
-      if (curMaxPriorityBucket_->second.empty ())
-        curMaxDigitsBucket_->second.erase (curMaxPriorityBucket_);
+      T t = *curHighest_;
+      curPriorityBucket_->second.erase (curHighest_);
+      if (curPriorityBucket_->second.empty ())
+        curDigitsBucket_->second.erase (curPriorityBucket_);
       
-      if (curMaxDigitsBucket_->second.empty ())
-        buckets_.erase (curMaxDigitsBucket_);
+      if (curDigitsBucket_->second.empty ())
+        buckets_.erase (curDigitsBucket_);
       --size_;
 
       if (size_ != 0) {
-        curMaxDigitsBucket_ = DIRECTION::getIter (buckets_);
-        curMaxPriorityBucket_ = DIRECTION::getIter (curMaxDigitsBucket_->second);
-        curMax_ = curMaxPriorityBucket_->second.begin ();
+        curDigitsBucket_ = DIRECTION::getIter (buckets_);
+        curPriorityBucket_ = DIRECTION::getIter (curDigitsBucket_->second);
+        curHighest_ = curPriorityBucket_->second.begin ();
       }
       return t;
     };
@@ -209,7 +212,7 @@ namespace data {
      */
     T& top () {
       if (size_ == 0) throw runtime_error ("Priority queue is empty.");
-      return *curMax_;
+      return *curHighest_;
     };
 
     /**
@@ -271,20 +274,40 @@ namespace data {
       int size_;
 
       /**
-       * The digits bucket in which the current max priority element resides.
+       * The digits bucket in which the current highest priority element resides.
        */
-      typename BUCKETS::iterator curMaxDigitsBucket_;
+      typename BUCKETS::iterator curDigitsBucket_;
 
       /**
-       * The priority bucket in which the current max priority element resides.
+       * The priority bucket in which the current highest priority element resides.
        */
-      typename BUCKET::iterator curMaxPriorityBucket_;
+      typename BUCKET::iterator curPriorityBucket_;
 
       /**
-       * The current max priority element.
+       * The current highest priority element.
        */
-      typename list<T>::iterator curMax_;
+      typename list<T>::iterator curHighest_;
   }; //PriorityQueue
+
+  /**
+   * \struct MinPriorityQueue
+   * Lower valued priorities are higher priorities. This exists as a class because
+   * g++ does not yet have templated typedefs.
+   *
+   * \tparam T The type to be held by the queue.
+   */
+  template<typename T>
+  struct MinPriorityQueue : public PriorityQueue<T, Min> {};
+
+  /**
+   * \struct MinPriorityQueue
+   * Higher valued priorities are higher priorities. This exists as a class because
+   * g++ does not yet have templated typedefs.
+   *
+   * \tparam T The type to be held by the queue.
+   */
+  template<typename T>
+  struct MaxPriorityQueue : public PriorityQueue<T, Max> {};
 }; //data
 
 #endif //DATA_PRIORITYQUEUE_H
