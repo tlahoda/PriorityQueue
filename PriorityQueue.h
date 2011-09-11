@@ -8,7 +8,9 @@
  * push has a typical performance of O(log k*Np) and a worst case performance of
  * O(2*log k*Np) where k is the maximum number of digits of a priority and Np is
  * the size of the set of priorities having the same number of digits as the
- * priority being pushed. This is independent of the number of elements held in
+ * priority being pushed. Worst case perfomrance occurs when a new digits bucket
+ * has to be inserted and a new priority bucket has to be inserted into the new
+ * digits bucket. The complexity is independent of the number of elements held in
  * the queue and is only dependent on the set of priorities being used. 
  *
  * pop_all has a complexity of O(n) where n is the number of unique priorities
@@ -156,7 +158,7 @@ namespace data {
      * inserted into the new digits bucket.
      *
      * Any issue with construction cost of the maps or the list could be
-     * alleviated by caching the maps instead of destroying them.
+     * alleviated by caching the maps instead of constructing and destroying them.
      *
      * \param priority The priority of the element.
      * \param t The element to insert.
