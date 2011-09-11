@@ -2,14 +2,20 @@
  * \file PriorityQueue.h, Contains a bi-directional priority queue implemented
  * using a LSD radix sort. 
  *
- * Due to the way C++ does its data structures pop performs in constant time and
- * push has a worse case performance of O(2*log (k*Np)) where k is the maximum
- * number of digits a priority may have and Np is the size of the set of 
- * priorities having the same number of digits as the priority being pushed. This
- * is independent of the number of elements held in the queue and is only
- * dependent on the set of priorities being used. Normally a radix sort has a
- * complexity of O(k*n) where k is the maximum number of digits a priority may
- * have and n is the number of possible priorities.
+ * Due to the way C++ does its data structures pop performs in constant time. top,
+ * empty, and size also perform in constant time.
+ *
+ * push has a typical performance of O(log k*Np) and a worst case performance of
+ * O(2*log k*Np) where k is the maximum number of digits of a priority and Np is
+ * the size of the set of priorities having the same number of digits as the
+ * priority being pushed. This is independent of the number of elements held in
+ * the queue and is only dependent on the set of priorities being used. 
+ *
+ * pop_all has a complexity of O(n) where n is the number of unique priorities
+ * currently in the queue. 
+ *
+ * pop, push, and pop_all benefit from empty priorities being removed from the
+ * structure.
  *
  * Copyright (C) 20011 Thomas P. Lahoda
  *
@@ -72,7 +78,7 @@ namespace data {
      * \return The iterator.
      */
     template<typename T>
-    static typename T::iterator getIter (T& t) {
+    static typename T::iterator iterator (T& t) {
       return t.begin ();
     };
   }; //Min
@@ -104,7 +110,7 @@ namespace data {
      * \return The iterator.
      */
     template<typename T>
-    static typename T::iterator getIter (T& t) {
+    static typename T::iterator iterator (T& t) {
       return --t.end ();
     };
   }; //Max
@@ -145,8 +151,9 @@ namespace data {
      * Pushes an element onto the PriorityQueue. Complexity is O(log k*Np)
      * where k is the maximum number of digits of a priority and Np is the size
      * of the set of priorities having the same number of digits as the priority
-     * being pushed. In some case this could perform O(2*log k*Np) to be more
-     * precise.
+     * being pushed. Worst case performance is O(2*log k*Np) and occurs when a
+     * new digits bucket has to be inserted and a new priority bucket has to be
+     * inserted into the new digits bucket.
      *
      * Any issue with construction cost of the maps or the list could be
      * alleviated by caching the maps instead of destroying them.
@@ -196,8 +203,8 @@ namespace data {
       --size_;
 
       if (size_ != 0) {
-        curDigitsBucket_ = DIRECTION::getIter (buckets_);
-        curPriorityBucket_ = DIRECTION::getIter (curDigitsBucket_->second);
+        curDigitsBucket_ = DIRECTION::iterator (buckets_);
+        curPriorityBucket_ = DIRECTION::iterator (curDigitsBucket_->second);
         curHighest_ = curPriorityBucket_->second.begin ();
       }
       return t;
@@ -213,6 +220,26 @@ namespace data {
     T& top () {
       if (size_ == 0) throw runtime_error ("Priority queue is empty.");
       return *curHighest_;
+    };
+
+    /**
+     * Returns the PriorityQueue as a stable ordered list containing all of the elements
+     * currently in the queue. Complexity is O(n) where n is the number of unique 
+     * priorities currently in the queue. flatten will empty the PriorityQueue.
+     */
+    list<T> pop_all () {
+      list<T> res;
+      while (!buckets_.empty ()) {
+        auto curDigitsBucket = DIRECTION::iterator (buckets_);
+        while (!curDigitsBucket->second.empty ()) {
+          auto curPriorityBucket = DIRECTION::iterator (curDigitsBucket->second);
+          res.splice (res.end (), curPriorityBucket->second);
+          curDigitsBucket->second.erase (curPriorityBucket);
+        }
+        buckets_.erase (curDigitsBucket);
+      }
+      size_ = 0;
+      return res;   
     };
 
     /**
