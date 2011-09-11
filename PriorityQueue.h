@@ -300,7 +300,7 @@ namespace data {
   struct MinPriorityQueue : public PriorityQueue<T, Min> {};
 
   /**
-   * \struct MinPriorityQueue
+   * \struct MaxPriorityQueue
    * Higher valued priorities are higher priorities. This exists as a class because
    * g++ does not yet have templated typedefs.
    *
