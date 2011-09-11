@@ -27,6 +27,7 @@
 #include "PriorityQueue.h"
 
 int main (int argc, char** argv) {
+  using namespace std;
   using namespace data;
 
   PriorityQueue<string> queue;
