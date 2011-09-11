@@ -24,6 +24,8 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <iterator>
+#include <algorithm>
 
 #include "PriorityQueue.h"
 
@@ -31,27 +33,52 @@ int main (int argc, char** argv) {
   using namespace std;
   using namespace data;
 
-  MinPriorityQueue<string> queue;
-  queue.push ("30", "3");
-  queue.push ("20", "2a");
-  queue.push ("600", "6c");
-  queue.push ("1", "1");
-  queue.push ("20", "2b");
-  queue.push ("600", "6a");
-  queue.push ("500", "5");
-  queue.push ("40", "4");
-  queue.push ("20", "2c");
-  queue.push ("600", "6b");
+  MinPriorityQueue<string> minQueue;
+  minQueue.push ("30", "3");
+  minQueue.push ("20", "2a");
+  minQueue.push ("600", "6c");
+  minQueue.push ("1", "1");
+  minQueue.push ("20", "2b");
+  minQueue.push ("600", "6a");
+  minQueue.push ("500", "5");
+  minQueue.push ("40", "4");
+  minQueue.push ("20", "2c");
+  minQueue.push ("600", "6b");
 
-  queue.print ();
+  cout << "----------------------------------------" << endl;
+  cout << "MinPriorityQueue internal structure:" << endl;
+  cout << "----------------------------------------" << endl;
+  minQueue.print ();
+  cout << "----------------------------------------" << endl << endl;
 
-  list<string> flatQueue = queue.pop_all ();
+  cout << "Min pop_all:" << endl;
+  cout << "----------------------------------------" << endl;
+  list<string> flatQueue = minQueue.pop_all ();
+  copy (flatQueue.begin (), flatQueue.end (), ostream_iterator<string> (cout, "\n"));
+  cout << "----------------------------------------" << endl << endl;
 
-  for (list<string>::iterator cur = flatQueue.begin (); cur != flatQueue.end (); ++cur) {
-    cout << *cur << endl;
-  }
-  //while (!queue.empty ())
-  //  cout << queue.pop () << std::endl;
+  MaxPriorityQueue<string> maxQueue;
+  maxQueue.push ("30", "3");
+  maxQueue.push ("20", "2a");
+  maxQueue.push ("600", "6c");
+  maxQueue.push ("1", "1");
+  maxQueue.push ("20", "2b");
+  maxQueue.push ("600", "6a");
+  maxQueue.push ("500", "5");
+  maxQueue.push ("40", "4");
+  maxQueue.push ("20", "2c");
+  maxQueue.push ("600", "6b");
+
+  cout << "MaxPriorityQueue internal structure:" << endl;
+  cout << "----------------------------------------" << endl;
+  maxQueue.print ();
+  cout << "----------------------------------------" << endl << endl;
+
+  cout << "Max pop:" << endl;
+  cout << "----------------------------------------" << endl;
+  while (!maxQueue.empty ())
+    cout << maxQueue.pop () << std::endl;
+  cout << "----------------------------------------" << endl;
   
   return 0;
 };
