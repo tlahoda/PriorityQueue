@@ -110,9 +110,11 @@ namespace data {
      * Removes and returns the highest priority element. This is a constant time operation.
      *
      * \return The highest priority element.
+     *
+     * \throw runtime_error If the queue is empty.
      */
     T pop () {
-      if (size_ == 0) throw std::runtime_error ("Priority queue is empty.");
+      if (size_ == 0) throw runtime_error ("Priority queue is empty.");
 
       T t = *curMax_;
       curMaxPriorityBucket_->second.erase (curMax_);
@@ -135,9 +137,11 @@ namespace data {
      * Returns the highest priority element. This is a constant time operation.
      *
      * \return A reference to the highest priority element.
+     *
+     * \throw runtime_error If the queue is empty.
      */
     T& top () {
-      if (size_ == 0) throw std::runtime_error ("Priority queue is empty.");
+      if (size_ == 0) throw runtime_error ("Priority queue is empty.");
       return *curMax_;
     };
 
