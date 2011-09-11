@@ -52,7 +52,6 @@
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
-#include <iostream>
 
 namespace data {
   using namespace std;
@@ -223,7 +222,7 @@ namespace data {
      *
      * \throw runtime_error If the queue is empty.
      */
-    T& top () {
+    T& top () const {
       if (size_ == 0) throw runtime_error ("Priority queue is empty.");
       return *curHighest_;
     };
@@ -253,21 +252,21 @@ namespace data {
      *
      * \return Whether or not the PriorityQueue is empty.
      */
-    bool empty () { return size_ == 0; };
+    bool empty () const { return size_ == 0; };
 
     /**
      * Tells the number of elements in the PriorityQueue.
      *
      * \return The size.
      */
-    unsigned int size () { return size_; };
+    unsigned int size () const { return size_; };
 
     /**
      * Prints the contents of the queue.
      *
      * \return void.
      */
-    void print () {
+    void print () const {
       for (auto curDigitsBucket = buckets_.begin (), end = buckets_.end (); 
            curDigitsBucket != end; ++curDigitsBucket) {
         cout << curDigitsBucket->first << endl;
