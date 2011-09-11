@@ -30,7 +30,7 @@ int main (int argc, char** argv) {
   using namespace std;
   using namespace data;
 
-  PriorityQueue<string> queue;
+  PriorityQueue<string, Min> queue;
   queue.push ("30", "3");
   queue.push ("20", "2a");
   queue.push ("600", "6c");
@@ -41,6 +41,8 @@ int main (int argc, char** argv) {
   queue.push ("40", "4");
   queue.push ("20", "2c");
   queue.push ("600", "6b");
+
+  queue.print ();
 
   while (!queue.empty ())
     cout << queue.pop () << std::endl;

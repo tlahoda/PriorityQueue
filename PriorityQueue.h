@@ -1,6 +1,6 @@
 /**
- * \file PriorityQueue.h, Contains a priority queue implemented using an improved
- * radix sort. 
+ * \file PriorityQueue.h, Contains a priority queue implemented using a LSD radix
+ * sort. 
  *
  * Due to the way C++ does its data structures pop performs in constant time and
  * push has a worse case performance of O(2*log (k*Np)) where k is the maximum
@@ -39,17 +39,84 @@
 #include <list>
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
+#include <iostream>
 
 namespace data {
   using namespace std;
+
+  /**
+   * \struct Min
+   * Makes lower values the higher priorities.
+   */
+  struct Min {
+    /**
+     * Determines if the priority is lower than min.
+     *
+     * \param priority The priority to check.
+     * \param min The min to check.
+     *
+     * \return bool True if lower, false otherwise.
+     */
+    static bool compare (const string& priority, const string& min) {
+      return priority < min;
+    };
+
+    /**
+     * Get the iterator from the container.
+     *
+     * \tparam T The type of the container.
+     *
+     * \param t The container.
+     *
+     * \return The iterator.
+     */
+    template<typename T>
+    static typename T::iterator getIter (T& t) {
+      return t.begin ();
+    };
+  };
+
+  /**
+   * \struct Max
+   * Makes higher values the higher priorities.
+   */
+  struct Max {
+    /**
+     * Determines if the priority is higher than max.
+     *
+     * \param priority The priority to check.
+     * \param max The max to check.
+     *
+     * \return bool True if higher, false otherwise.
+     */
+    static bool compare (const string& priority, const string& max) {
+      return priority > max;
+    };
+
+    /**
+     * Get the iterator from the container.
+     *
+     * \tparam T The type of the container.
+     *
+     * \param t The container.
+     *
+     * \return The iterator.
+     */
+    template<typename T>
+    static typename T::iterator getIter (T& t) {
+      return --t.end ();
+    };
+  };
 
   /**
    * \struct PriorityQueue
    * Implements a priority queue in terms of a radix sort.
    *
    * \tparam T The type of the elements held by the PriorityQueue.
+   * \tparam DIRECTION Whether or not lower or higher values are the higher priorities.
    */
-  template<typename T>
+  template<typename T, typename DIRECTION>
   struct PriorityQueue {
     /**
      * \typedef map<string, list<T> > BUCKET
@@ -98,7 +165,7 @@ namespace data {
 
       priorityBucket->second.push_back (t);
 
-      if (size_ == 0 || priority > *curMax_) {
+      if (size_ == 0 || DIRECTION::compare (priority, *curMax_)) {
         curMaxDigitsBucket_ = digitsBucket;
         curMaxPriorityBucket_ = priorityBucket;
         curMax_ = priorityBucket->second.begin ();
@@ -126,8 +193,8 @@ namespace data {
       --size_;
 
       if (size_ != 0) {
-        curMaxDigitsBucket_ = --buckets_.end ();
-        curMaxPriorityBucket_ = --(curMaxDigitsBucket_->second.end ());
+        curMaxDigitsBucket_ = DIRECTION::getIter (buckets_);
+        curMaxPriorityBucket_ = DIRECTION::getIter (curMaxDigitsBucket_->second);
         curMax_ = curMaxPriorityBucket_->second.begin ();
       }
       return t;
@@ -158,6 +225,23 @@ namespace data {
      * \return The size.
      */
     unsigned int size () { return size_; };
+
+    /**
+     * Prints the contents of the queue.
+     *
+     * \return void.
+     */
+    void print () {
+      for (typename BUCKETS::iterator curDigitsBucket = buckets_.begin (); curDigitsBucket != buckets_.end (); ++curDigitsBucket) {
+        cout << curDigitsBucket->first << endl;
+        for (typename BUCKET::iterator curPriorityBucket = curDigitsBucket->second.begin (); curPriorityBucket != curDigitsBucket->second.end (); ++curPriorityBucket) {
+          cout << "\t" << curPriorityBucket->first << endl;
+          for (typename list<T>::iterator cur = curPriorityBucket->second.begin (); cur != curPriorityBucket->second.end (); ++cur) {
+            cout << "\t\t" << *cur << endl;
+          }
+        }
+      }
+    };
 
     private:
       /**
