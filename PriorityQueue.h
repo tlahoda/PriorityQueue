@@ -2,8 +2,12 @@
  * \file PriorityQueue.h, Contains a bi-directional priority queue implemented
  * using a LSD radix sort. 
  *
- * Due to the way C++ does its data structures pop performs in constant time. top,
- * empty, and size also perform in constant time.
+ * pop has a constant time complexity. This is acheived by the removal of empty
+ * buckets from the structure, by using C++'s begin/end iterators to find the
+ * highest priority, and by caching the current highest priority element, the
+ * priortiy bucket it is in and the digits bucket it is in.
+ *
+ * top, empty, and size also perform in constant time.
  *
  * push has a typical performance of O(log k*Np) and a worst case performance of
  * O(2*log k*Np) where k is the maximum number of digits of a priority and Np is
@@ -16,8 +20,8 @@
  * pop_all has a complexity of O(n) where n is the number of unique priorities
  * currently in the queue. 
  *
- * pop, push, and pop_all benefit from empty priorities being removed from the
- * structure.
+ * pop and pop_all benefit from empty priorities being removed from the structure
+ * while this behavior will degrade the performance of push in these cases. 
  *
  * Copyright (C) 20011 Thomas P. Lahoda
  *
