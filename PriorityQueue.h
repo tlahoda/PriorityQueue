@@ -171,11 +171,11 @@ namespace data {
      */
     void push (const string& priority, const T& t) {
       unsigned int numDigits = priority.size ();
-      typename BUCKETS::iterator digitsBucket = buckets_.find (numDigits);
+      auto digitsBucket = buckets_.find (numDigits);
       if (digitsBucket == buckets_.end ())
         digitsBucket = buckets_.insert (make_pair (numDigits, BUCKET ())).first;
      
-      typename BUCKET::iterator priorityBucket = digitsBucket->second.find (priority);
+      auto priorityBucket = digitsBucket->second.find (priority);
       if (priorityBucket == digitsBucket->second.end ())
         priorityBucket = digitsBucket->second.insert (make_pair (priority, list<T> ())).first;
 
@@ -268,11 +268,14 @@ namespace data {
      * \return void.
      */
     void print () {
-      for (typename BUCKETS::iterator curDigitsBucket = buckets_.begin (); curDigitsBucket != buckets_.end (); ++curDigitsBucket) {
+      for (auto curDigitsBucket = buckets_.begin (), end = buckets_.end (); 
+           curDigitsBucket != end; ++curDigitsBucket) {
         cout << curDigitsBucket->first << endl;
-        for (typename BUCKET::iterator curPriorityBucket = curDigitsBucket->second.begin (); curPriorityBucket != curDigitsBucket->second.end (); ++curPriorityBucket) {
+        for (auto curPriorityBucket = curDigitsBucket->second.begin (), endBucket = curDigitsBucket->second.end ();
+             curPriorityBucket != endBucket; ++curPriorityBucket) {
           cout << "\t" << curPriorityBucket->first << endl;
-          for (typename list<T>::iterator cur = curPriorityBucket->second.begin (); cur != curPriorityBucket->second.end (); ++cur) {
+          for (auto cur = curPriorityBucket->second.begin (), endEle = curPriorityBucket->second.end ();
+              cur != endEle; ++cur) {
             cout << "\t\t" << *cur << endl;
           }
         }
