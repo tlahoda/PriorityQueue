@@ -1,5 +1,5 @@
 /**
- * \file priority_queue.cpp, Contains the PriortityQueue example.
+ * \file priority_queue.cpp, Contains the PriorityQueue usage example.
  *
  * Copyright (C) 2011 Thomas P. Lahoda
  *
