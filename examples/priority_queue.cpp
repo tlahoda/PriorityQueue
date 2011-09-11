@@ -23,6 +23,7 @@
  */
 #include <iostream>
 #include <string>
+#include <list>
 
 #include "PriorityQueue.h"
 
@@ -44,8 +45,13 @@ int main (int argc, char** argv) {
 
   queue.print ();
 
-  while (!queue.empty ())
-    cout << queue.pop () << std::endl;
+  list<string> flatQueue = queue.pop_all ();
+
+  for (list<string>::iterator cur = flatQueue.begin (); cur != flatQueue.end (); ++cur) {
+    cout << *cur << endl;
+  }
+  //while (!queue.empty ())
+  //  cout << queue.pop () << std::endl;
   
   return 0;
 };
