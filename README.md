@@ -118,58 +118,58 @@ You can run the resultant executab;e with the following command:
 #####output:
 ```
 MinPriorityQueue internal structure:  
-1  
-        1  
-                1  
-2  
-        20  
-                2a  
-                2b  
-                2c  
-        30  
-                3  
-        40  
-                4  
-3  
-        500  
-                5  
-        600  
-                6c  
-                6a  
-                6b  
+1
+        1
+                1
+2
+        20
+                2a
+                2b
+                2c
+        30
+                3
+        40
+                4
+3
+        500
+                5
+        600
+                6c
+                6a
+                6b
 
 Min pop_all:  
-1  
-2a  
-2b  
-2c  
-3  
-4  
-5  
-6c  
-6a  
-6b  
+1
+2a
+2b
+2c
+3
+4
+5
+6c
+6a
+6b
 
-  MaxPriorityQueue internal structure:  
-  1  
-  1  
-  1  
-  2  
-  20  
-  2a  
-  2b  
-  2c  
-  30  
-  3  
-  40  
-  4  
-  3  
-  500  
-  5  
-  600  
-  6c  
-  6a  
-  6b  
+MaxPriorityQueue internal structure:  
+1
+        1
+                1
+2
+        20
+                2a
+                2b
+                2c
+        30
+                3
+        40
+                4
+3
+        500
+                5
+        600
+                6c
+                6a
+                6b
 
 Max pop:
 6c
