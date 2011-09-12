@@ -122,7 +122,7 @@ namespace data {
 
   /**
    * \struct PriorityQueue
-   * Implements a priority queue in terms of a radix sort.
+   * Implements a bi-directional priority queue in terms of a radix sort.
    *
    * \tparam T The type of the elements held by the PriorityQueue.
    * \tparam DIRECTION Whether or not lower or higher values are the higher priorities.
