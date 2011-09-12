@@ -136,7 +136,7 @@ namespace data {
      * O(log k*n) where k is the maximum number of digits a priority may have and
      * n is the number of unigue  priorities currently in the queue having the
      * same length as the priority being pushed. Worst case complexity is
-     * O(2*log k*Np) where k is the maximum number of digits a priority may have
+     * O(log 2*k*Np) where k is the maximum number of digits a priority may have
      * and Np is the size of the set of priorities having the same number of
      * digits as the priority being pushed. This occurs when both a digits bucket
      * has to be created and a priority bucket has to be created. This is 
