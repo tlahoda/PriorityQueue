@@ -24,8 +24,8 @@ The sorting occurs by sifting an element through these layers and
 into position. 
 
 ####Example:
-The following code pushes a string "foo" with a priority of 300 onto
-the priority queue.
+The following code pushes a string "foo" with a priority of "300" onto
+the priority queue with lower priorities being the highest priorities.
 
 ```c++
 MinPriorityQueue<string> queue;  
