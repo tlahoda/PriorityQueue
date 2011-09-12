@@ -20,11 +20,11 @@ PriorityQueue uses a map of maps of lists as a data store.
 Complexities 
 ------------
 
-####push - O(log k*n) typical, O(2*log k*Np) worst case
+####push - O(log k*n) typical, O(log 2*k*Np) worst case
 push has a typical complexity of O(log k*n) where k is the maximum
 number of digits a priority may have and n is the number of unigue 
 priorities currently in the queue having the same length as the
-priority being pushed. Worst case complexity is O(2*log k*Np) where
+priority being pushed. Worst case complexity is O(log 2*k*Np) where
 k is the maximum number of digits a priority may have and Np is the
 size of the set of priorities having the same number of digits as
 the priority being pushed. This occurs when both a digits bucket
