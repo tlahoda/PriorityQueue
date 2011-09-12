@@ -12,24 +12,37 @@ same number of digits as the priority being pushed.
 Algorithm Details
 -----------------
 Radix sort is a multi-pass distribution sort that distributes based
-on the individual digits in a key. The first pass distributes based
-on the number of digits in the key. The second pass distributes
-based on the lexicographic ordering of the keys. The elements are
-inserted into the bucket with insertion order maintained.
+on the individual digits in a key. PriorityQueue's implementation
+sorts based on key length and then based on lexicographic order.
+The first pass distributes based on the number of digits in the key.
+The second pass distributes based on the lexicographic ordering of
+the keys. The elements are inserted into the bucket with insertion
+order maintained.
+
+In order to acheive a constant time complexity for pop empty buckets
+are pruned from the structure. This allows 
 
 ####Example:
-The following code pushes a string "foo" with a priority of "300" onto
-the priority queue the elements bucket in with lower priorities being
-the highest priorities.
+The following code pushes a string "foo" with a priority of "300"
+onto the priority queue where lower priorities are the highest
+priorities. Then "bar" with a priority of "400" is pushed onto the
+queue.
 
 ```c++
 MinPriorityQueue<string> queue;  
 queue.push ("300", "foo");
+queue.push ("400", "bar");
 ```
 
-First the bucket for priorities consisting of three digits is located.
-Then the bucket for the priority "300" is located in it. Finally "foo" is
-pushed onto the end of the priority "300" bucket.
+For the first push the bucket for priorities consisting of three
+digits is first located. Then the bucket for the priority "300" is
+located in it. Finally "foo" is pushed onto the end of the priority
+"300" bucket.
+
+For the second push the bucket for priorities consisting of three
+digits is first located. Then the bucket for the priority "400" is
+located in it. Finally "bar" is pushed onto the end of the priority
+"400" bucket.
 
 Implementation Details
 ----------------------
