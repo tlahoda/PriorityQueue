@@ -41,15 +41,23 @@ and pruning empty buckets from the structure. Pruning empty buckets
 allows for the use of C++'s begin and/or end iterators (constant
 time operations) to locate the new highest priority.
 
+If desirable pop can be degraded to O(log k*Np) by not removing empty
+buckets. Doing so will improve push's worst case performance to
+O(log k*Np) but leave the typical case unchanged. This change will
+also leave top as a constant time operation but degrade pop_all to a
+worst case O(log n) where n is the size of the set of all priorities.
+
 ####top
-top has a constant complexity. This is achieved as a result of caching
-the current highest priority element.
+top has a constant complexity. This is acheived by caching the current
+highest priority element, the priority bucket it is in and the digits
+bucket it is in.
 
 ####pop_all
 pop_all has a O(n) complexity where n is the number of unique
 priorities currently in the queue. This is independent of the number
-of elements held in the queue and is achieved by splicing the element
-lists and returning the result.
+of elements held in the queue and is achieved pruning empty buckets
+from the structure and by splicing the remaining element lists then
+returning the result.
 
 ####empty
 empty has a constant complexity.
