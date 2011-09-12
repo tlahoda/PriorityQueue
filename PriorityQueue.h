@@ -148,7 +148,7 @@ namespace data {
 
     /**
      * Destroys a PriorityQueue. The will be a linear time operation based on the
-     * number of elements in the queue.
+     * number of elements in the queue at the time of destruction.
      */
     ~PriorityQueue () {};
 
@@ -156,9 +156,10 @@ namespace data {
      * Pushes an element onto the PriorityQueue. Complexity is O(log k*Np)
      * where k is the maximum number of digits of a priority and Np is the size
      * of the set of priorities having the same number of digits as the priority
-     * being pushed. Worst case performance is O(2*log k*Np) and occurs when a
-     * new digits bucket has to be inserted and a new priority bucket has to be
-     * inserted into the new digits bucket.
+     * being pushed (this set can be defined to be smaller subset as well).
+     * Worst case performance is O(2*log k*Np) and occurs when a new digits bucket
+     * has to be inserted and a new priority bucket has to be inserted into the
+     * new digits bucket.
      *
      * Any issue with construction cost of the maps or the list could be
      * alleviated by caching the maps instead of constructing and destroying them.
@@ -190,6 +191,14 @@ namespace data {
 
     /**
      * Removes and returns the highest priority element. This is a constant time operation.
+     * This is acheived by the removal of empty buckets from the structure, by using C++'s
+     * begin/end iterators to find the highest priority, and by caching the current highest
+     * priority element, the priority bucket it is in and the digits bucket it is in.
+     * If desirable pop can be degraded to O(log k*Np) by not removing empty buckets. Doing
+     * so will improve push's worst case performance to O(log k*Np) but leave the typical
+     * case unchanged. This change will also leave top as a constant time operation but 
+     * degrade pop_all to a worst case O(log n) where n is the size of the set of all
+     * priorities.
      *
      * \return The highest priority element.
      *
@@ -228,9 +237,12 @@ namespace data {
     };
 
     /**
-     * Returns the PriorityQueue as a stable ordered list containing all of the elements
-     * currently in the queue. Complexity is O(n) where n is the number of unique 
-     * priorities currently in the queue. flatten will empty the PriorityQueue.
+     * Empties and returns the PriorityQueue as a stable ordered list containing
+     * all of the elements currently in the queue. Complexity is O(n) where n is
+     * the number of unique priorities currently in the queue. This is independent
+     * of the number of elements in the queue.
+     *
+     * \return The stable ordered list of elements.
      */
     list<T> pop_all () {
       list<T> res;
