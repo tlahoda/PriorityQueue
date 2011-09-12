@@ -1,31 +1,26 @@
 Priority Queue
 ==============
 PriorityQueue is a bi-directional priority queue implemented in
-terms of a least significant digit radix sort. pop, top, empty,
-and size have a constant time complexity. pop_all has a O(n) 
-complexity where n is the number of unique priorities currently
-in the queue. push has a typical complexity of O(log k*Np) and a 
-worst case complexity of O(2*log k*Np) where k is the maximum
-number of digits a priority may have and Np is the size of the set
-of priorities having the same number of digits as the priority 
-being pushed.
+terms of a radix sort. pop, top, empty, and size have a constant
+time complexity. pop_all has a O(n) complexity where n is the
+number of unique priorities currently in the queue. push has a
+typical complexity of O(log k*Np) and a worst case complexity of
+O(2*log k*Np) where k is the maximum number of digits a priority
+may have and Np is the size of the set of priorities having the
+same number of digits as the priority being pushed.
 
 Algorithm Details
 -----------------
-Radix sort sorts based on the individual digits in a key. 
-PriorityQueue uses a two layer bucketing strategy to perform the 
-radix sort. The first layer of buckets are dilineated by the number
-of digits in the priority. The second layer of buckets are
-delineated by the priority and are in lexicographic order in the
-digits bucket. The elements are pushed onto the end of the priority
-bucket maintaining insertion order.
-
-The sorting occurs by sifting an element through these layers and
-into position. 
+Radix sort is a multi-pass distribution sort that distributes based
+on the individual digits in a key. The first pass distributes based
+on the number of digits in the key. The second pass distributes
+based on the lexicographic ordering of the keys. The elements are
+inserted into the bucket with insertion order maintained.
 
 ####Example:
 The following code pushes a string "foo" with a priority of "300" onto
-the priority queue with lower priorities being the highest priorities.
+the priority queue the elements bucket in with lower priorities being
+the highest priorities.
 
 ```c++
 MinPriorityQueue<string> queue;  
