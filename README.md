@@ -27,8 +27,10 @@ into position.
 The following code pushes a string "foo" with a priority of 300 onto
 the priority queue.
 
+```c++
 MinPriorityQueue<string> queue;  
 queue.push ("300", "foo");
+```
 
 First the bucket for priorities consisting of three digits is located.
 Then the bucket for the priority "300" is located. Finally "foo" is
