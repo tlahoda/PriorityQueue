@@ -97,3 +97,21 @@ constant time operation. Determining the next highest priority is done by
 grabbing the first digits bucket in the map, then the first priority
 bucket, finally grabbing the first element on the element list.
 
+examples/priority_queue.cpp
+---------------------------
+
+priority_queue.cpp contains a usage example of both the MinPriorityQueue
+and the MaxPriorityQueue. So far I have only tried building the example on
+g++ version 4.5.2 with C++0x enabled. The following command line should
+work to compile the example:
+
+```bash
+g++ -Wall -std=gnu++0x examples/priority_queue.cpp -I. -o example
+```
+
+You can run the resultant executab;e with the following command:
+
+```bash
+./example
+```
+
