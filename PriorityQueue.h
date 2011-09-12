@@ -1,27 +1,6 @@
 /**
  * \file PriorityQueue.h, Contains a bi-directional priority queue implemented
- * using a LSD radix sort. 
- *
- * pop has a constant time complexity. This is acheived by the removal of empty
- * buckets from the structure, by using C++'s begin/end iterators to find the
- * highest priority, and by caching the current highest priority element, the
- * priortiy bucket it is in and the digits bucket it is in.
- *
- * top, empty, and size also perform in constant time.
- *
- * push has a typical performance of O(log k*Np) and a worst case performance of
- * O(2*log k*Np) where k is the maximum number of digits of a priority and Np is
- * the size of the set of priorities having the same number of digits as the
- * priority being pushed. Worst case perfomrance occurs when a new digits bucket
- * has to be inserted and a new priority bucket has to be inserted into the new
- * digits bucket. The complexity is independent of the number of elements held in
- * the queue and is only dependent on the set of priorities being used. 
- *
- * pop_all has a complexity of O(n) where n is the number of unique priorities
- * currently in the queue. 
- *
- * pop and pop_all benefit from empty priorities being removed from the structure
- * while this behavior will degrade the performance of push in these cases. 
+ * using a radix sort. 
  *
  * Copyright (C) 20011 Thomas P. Lahoda
  *
@@ -147,19 +126,21 @@ namespace data {
     PriorityQueue () : buckets_ (), size_ (0), curDigitsBucket_ (), curPriorityBucket_ (), curHighest_ () {};
 
     /**
-     * Destroys a PriorityQueue. The will be a linear time operation based on the
-     * number of elements in the queue at the time of destruction.
+     * Destroys a PriorityQueue. Complexity is O(n) where n is the number of elements
+     * in the queue at the time of destruction.
      */
     ~PriorityQueue () {};
 
     /**
-     * Pushes an element onto the PriorityQueue. Complexity is O(log k*Np)
-     * where k is the maximum number of digits of a priority and Np is the size
-     * of the set of priorities having the same number of digits as the priority
-     * being pushed (this set can be defined to be smaller subset as well).
-     * Worst case performance is O(2*log k*Np) and occurs when a new digits bucket
-     * has to be inserted and a new priority bucket has to be inserted into the
-     * new digits bucket.
+     * Pushes an element onto the PriorityQueue. push has a typical complexity of
+     * O(log k*n) where k is the maximum number of digits a priority may have and
+     * n is the number of unigue  priorities currently in the queue having the
+     * same length as the priority being pushed. Worst case complexity is
+     * O(2*log k*Np) where k is the maximum number of digits a priority may have
+     * and Np is the size of the set of priorities having the same number of
+     * digits as the priority being pushed. This occurs when both a digits bucket
+     * has to be created and a priority bucket has to be created. This is 
+     * guaranteed to occur the first time a priority is pushed into the queue.
      *
      * Any issue with construction cost of the maps or the list could be
      * alleviated by caching the maps instead of constructing and destroying them.
@@ -194,11 +175,6 @@ namespace data {
      * This is acheived by the removal of empty buckets from the structure, by using C++'s
      * begin/end iterators to find the highest priority, and by caching the current highest
      * priority element, the priority bucket it is in and the digits bucket it is in.
-     * If desirable pop can be degraded to O(log k*Np) by not removing empty buckets. Doing
-     * so will improve push's worst case performance to O(log k*Np) but leave the typical
-     * case unchanged. This change will also leave top as a constant time operation but 
-     * degrade pop_all to a worst case O(log n) where n is the size of the set of all
-     * priorities.
      *
      * \return The highest priority element.
      *
