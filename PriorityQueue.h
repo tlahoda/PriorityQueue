@@ -226,6 +226,8 @@ namespace data {
 
     /**
      * Returns the highest priority element. This is a constant time operation.
+     * This is acheived by caching the current highest priority element, the priority
+     * bucket it is in and the digits bucket it is in.
      *
      * \return A reference to the highest priority element.
      *
