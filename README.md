@@ -12,15 +12,17 @@ same number of digits as the priority being pushed.
 Algorithm Details
 -----------------
 Radix sort is a multi-pass distribution sort that distributes based
-on the individual digits in a key. PriorityQueue's implementation
-sorts based on key length and then based on lexicographic order.
-The first pass distributes based on the number of digits in the key.
-The second pass distributes based on the lexicographic ordering of
-the keys. The elements are inserted into the bucket with insertion
-order maintained.
+on the individual digits in a key. The first pass of PriorityQueue's
+implementation of radix sort distributes based on the number of
+digits in the key. The second pass distributes based on the
+lexicographic ordering of the keys. The elements are inserted into
+the second bucket with insertion order maintained.
 
-In order to acheive a constant time complexity for pop empty buckets
-are pruned from the structure. This allows 
+pop has a constant time complexity. This is achieved by caching the
+current highest priority and pruning empty buckets from the structure.
+Pruning empty buckets allows for the use of C++'s begin and/or end
+iterators to locate the new highest priority which are constant time
+operations.
 
 ####Example:
 The following code pushes a string "foo" with a priority of "300"
