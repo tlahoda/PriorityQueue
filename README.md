@@ -15,9 +15,7 @@ the second bucket with insertion order maintained.
 Implementation Details
 ----------------------
 
-PriorityQueue uses a map of maps of lists as a data store. The
-map containing the maps of lists uses the number of digits of the
-priorities as its key. 
+PriorityQueue uses a map of maps of lists as a data store. 
 
 Complexities 
 ------------
