@@ -22,6 +22,7 @@ priorities as its key.
 Complexities 
 ------------
 
+####push
 push has a typical complexity of O(log k*n) where k is the maximum
 number of digits a priority may have and n is the number of unigue 
 priorities currently in the queue having the same length as the
@@ -30,15 +31,22 @@ k is the maximum number of digits a priority may have and Np is the
 size of the set of priorities having the same number of digits as
 the priority being pushed.
 
+####pop
 pop has a constant time complexity. This is achieved by caching the
 current highest priority and pruning empty buckets from the structure.
 Pruning empty buckets allows for the use of C++'s begin and/or end
 iterators (constant time operations) to locate the new highest
 priority.
 
-top, empty, and size have a constant time complexity. Top's constant
-time complexity is achieved as a result of caching the current
-highest priority element.
+####top
+top has a constant complexity. This is achieved as a result of caching
+the current highest priority element.
+
+####empty
+empty has a constant complexity.
+
+####size
+size has a constant complexity.
 
 ####Example:
 The following code pushes a string "foo" with a priority of "300"
