@@ -133,8 +133,8 @@ namespace data {
 
     /**
      * Pushes an element onto the PriorityQueue. push has a typical complexity of
-     * O(log k*n) where k is the maximum number of digits a priority may have and
-     * n is the number of unigue  priorities currently in the queue having the
+     * O(log k*p) where k is the maximum number of digits a priority may have and
+     * p is the number of unigue  priorities currently in the queue having the
      * same length as the priority being pushed. Worst case complexity is
      * O(log 2*k*Np) where k is the maximum number of digits a priority may have
      * and Np is the size of the set of priorities having the same number of
