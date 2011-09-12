@@ -13,12 +13,12 @@ being pushed.
 Algorithm Details
 -----------------
 Radix sort sorts based on the individual digits in a key. 
-PriorityQueue uses a three layer bucketing strategy to perform the 
+PriorityQueue uses a two layer bucketing strategy to perform the 
 radix sort. The first layer of buckets are dilineated by the number
 of digits in the priority. The second layer of buckets are
-delineated by the priority and are in lexicographic order. The 
-third layer of bucketing stores the actual elements maintaining
-insertion order.
+delineated by the priority and are in lexicographic order in the
+digits bucket. The elements are pushed onto the end of the priority
+bucket maintaining insertion order.
 
 The sorting occurs by sifting an element through these layers and
 into position. 
@@ -33,7 +33,7 @@ queue.push ("300", "foo");
 ```
 
 First the bucket for priorities consisting of three digits is located.
-Then the bucket for the priority "300" is located. Finally "foo" is
+Then the bucket for the priority "300" is located in it. Finally "foo" is
 pushed onto the end of the priority "300" bucket.
 
 Implementation Details
