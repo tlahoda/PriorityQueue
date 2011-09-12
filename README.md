@@ -66,10 +66,10 @@ empty has a constant complexity.
 size has a constant complexity.
 
 ####Example:
-The following code pushes a string "foo" with a priority of "300"
-onto the priority queue where lower priorities are the highest
-priorities. Then "bar" with a priority of "400" is pushed onto the
-queue. Finally the highest priority element is removed from the queue.
+The following code pushes a string "bar" with a priority of "400" onto
+the priority queue where priorities are in decreasing order.Then "foo"
+with a priority of "300" is pushed onto the queue. Finally the highest
+priority element is removed from the queue.
 
 ```c++
 MinPriorityQueue<string> queue;  
@@ -78,21 +78,24 @@ queue.push ("300", "foo");
 queue.pop ();
 ```
 
-For the first push the bucket for priorities consisting of three
-digits is first located or created. Then the bucket for the priority
-"400" is located or created in it. Finally "bar" is pushed onto the
-end of the priority "400" bucket.
+For the first push the bucket for priorities consisting of three digits
+is first searched for and then when not found created and inserted into
+the digits bucket map. Then the bucket for the priority "400" is 
+searched for and when not found created and inserted into the three 
+digits bucket. Finally "bar" is pushed onto the end of the priority
+"400" bucket.
 
-For the second push the bucket for priorities consisting of three
-digits is first located (it was created during the first push). Then
-the bucket for the priority "300" is located or created in it. Finally
-"foo" is pushed onto the end of the priority "300" bucket.
+For the second push the bucket for priorities consisting of three digits
+is first located (it was created during the first push). Then the bucket
+for the priority "300" is searched for and when not found created in the
+three digits bucket. Finally "foo" is pushed onto the end of the priority
+"300" bucket.
 
-The pop returns the first element highest priority which is "foo"
-having a priority of "300". "foo" is cached so retrieving and
-returning it are a constant time operation. The priority bucket and
-the digits bucket in which "foo" is cached are also cached so removing
-them is a constant time operation. Determining the next highest
-priority is done using C++'s begin and/or end iterators which are
-contant time operations.
+The pop returns the element with the highest priority which is "foo"
+having a priority of "300". "foo" is cached so retrieving and returning
+it are a constant time operation. Since the priority bucket in which
+"foo" resides is also cached and now empty, it is pruned which is a
+constant time operation. Determining the next highest priority is done by
+grabbing the first digits bucket in the map, then the first priority
+bucket, finally grabbing the first element on the element list.
 
