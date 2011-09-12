@@ -29,7 +29,10 @@ priorities currently in the queue having the same length as the
 priority being pushed. Worst case complexity is O(2*log k*Np) where
 k is the maximum number of digits a priority may have and Np is the
 size of the set of priorities having the same number of digits as
-the priority being pushed.
+the priority being pushed. This occurs when both a digits bucket
+has to be created and a priority bucket has to be created. This is 
+guaranteed to occur the first time a priority is pushed into the
+queue.
 
 ####pop
 pop has a constant time complexity. This is achieved by caching the
@@ -41,6 +44,12 @@ priority.
 ####top
 top has a constant complexity. This is achieved as a result of caching
 the current highest priority element.
+
+####pop_all
+pop_all has a O(n) complexity where n is the number of unique
+priorities currently in the queue. This is independent of the number
+of elements held in the queue and is achieved by splicing the element
+lists and returning the result.
 
 ####empty
 empty has a constant complexity.
@@ -78,3 +87,4 @@ the digits bucket in which "foo" is cached are also cached so removing
 them is a constant time operation. Determining the next highest
 priority is done using C++'s begin and/or end iterators which are
 contant time operations.
+
