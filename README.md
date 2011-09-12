@@ -22,7 +22,7 @@ priorities as its key.
 Complexities 
 ------------
 
-####push
+####push - O(log k*n) typical, O(2*log k*Np) worst case
 push has a typical complexity of O(log k*n) where k is the maximum
 number of digits a priority may have and n is the number of unigue 
 priorities currently in the queue having the same length as the
@@ -34,7 +34,7 @@ has to be created and a priority bucket has to be created. This is
 guaranteed to occur the first time a priority is pushed into the
 queue.
 
-####pop
+####pop - O(1)
 pop has a constant time complexity. This is achieved by caching the
 current highest priority, as well as the buckets in which it resides,
 and pruning empty buckets from the structure. Pruning empty buckets
@@ -47,22 +47,22 @@ O(log k*Np) but leave the typical case unchanged. This change will
 also leave top as a constant time operation but degrade pop_all to a
 worst case O(log n) where n is the size of the set of all priorities.
 
-####top
+####top - O(1)
 top has a constant complexity. This is acheived by caching the current
 highest priority element, the priority bucket it is in and the digits
 bucket it is in.
 
-####pop_all
+####pop_all - O(n)
 pop_all has a O(n) complexity where n is the number of unique
 priorities currently in the queue. This is independent of the number
 of elements held in the queue and is achieved pruning empty buckets
 from the structure and by splicing the remaining element lists then
 returning the result.
 
-####empty
+####empty - O(1)
 empty has a constant complexity.
 
-####size
+####size - O(1)
 size has a constant complexity.
 
 ####Example:
