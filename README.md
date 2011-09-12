@@ -36,10 +36,10 @@ queue.
 
 ####pop
 pop has a constant time complexity. This is achieved by caching the
-current highest priority and pruning empty buckets from the structure.
-Pruning empty buckets allows for the use of C++'s begin and/or end
-iterators (constant time operations) to locate the new highest
-priority.
+current highest priority, as well as the buckets in which it resides,
+and pruning empty buckets from the structure. Pruning empty buckets
+allows for the use of C++'s begin and/or end iterators (constant
+time operations) to locate the new highest priority.
 
 ####top
 top has a constant complexity. This is achieved as a result of caching
