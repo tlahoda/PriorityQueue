@@ -1,54 +1,49 @@
 Priority Queue
 ==============
-PriorityQueue is a bi-directional priority queue implemented in
-terms of a radix sort. 
+PriorityQueue is a bi-directional priority queue implemented in terms of
+a radix sort. 
 
 Algorithm Details
 -----------------
-Radix sort is a multi-pass distribution sort that distributes based
-on the individual digits in a key. The first pass of PriorityQueue's
-implementation of radix sort distributes based on the number of
-digits in the key. The second pass distributes based on the
-lexicographic ordering of the keys. The elements are inserted into
-the second bucket with insertion order maintained.
+Most radix sorts are multi-pass distribution sorts that distribute based
+on the individual digits in a key. PriorityQueue distributes based on the
+number of digits in a priority and the lexicographic order of the
+priorities. 
+
+The first level of buckets is a vector. Indexing into a vector is a
+constant time operation so this level of buckets does not effect the
+complexity. The next level is a map which introduces the logarithmic
+component to the comlexity. The final level of buckets is a list. Since a
+list's insert and erase operations are constant time this last level of
+buckets does not effect the complexity.
+
+The elements are pushed onto the end of the lists which allows for
+stability to be maintained.
 
 Implementation Details
 ----------------------
-
-PriorityQueue uses a map of maps of lists as a data store. 
+PriorityQueue uses a vector of maps of lists as a data store. 
 
 Complexities 
 ------------
 
-####push - O(log k*p) typical, O(log 2*k*Np) worst case
-push has a typical complexity of O(log k*p) where k is the maximum
-number of digits a priority may have and p is the number of unigue 
+####push - O(log p)
+push has a complexity of O(log p) where p is the number of unique 
 priorities currently in the queue having the same length as the
-priority being pushed. Worst case complexity is O(log 2*k*Np) where
-k is the maximum number of digits a priority may have and Np is the
-size of the set of priorities having the same number of digits as
-the priority being pushed. This occurs when both a digits bucket
-has to be created and a priority bucket has to be created. This is 
-guaranteed to occur the first time a priority is pushed into the
-queue.
+priority being pushed. 
 
-####pop - O(1)
-pop has a constant time complexity. This is achieved by caching the
-current highest priority, as well as the buckets in which it resides,
-and pruning empty buckets from the structure. Pruning empty buckets
-allows for the use of C++'s begin and/or end iterators (constant
-time operations) to locate the new highest priority.
-
-If desirable pop can be degraded to O(log k*Np) by not removing empty
-buckets. Doing so will improve push's worst case performance to
-O(log k*Np) but leave the typical case unchanged. This change will
-also leave top as a constant time operation but degrade pop_all to a
-worst case O(log n) where n is the size of the set of all priorities.
+####pop - O(k)
+pop has a complexity of O(k) where k is the maximum number of digits
+a priority will have. This is achieved by caching the current highest
+priority, as well as the priority bucket in which it resides, and
+pruning empty priority buckets from the structure. Pruning empty
+priority buckets allows for the use of C++'s begin and/or end
+iterators (constant time operations) to help locate the new highest
+priority.
 
 ####top - O(1)
 top has a constant complexity. This is acheived by caching the current
-highest priority element, the priority bucket it is in and the digits
-bucket it is in.
+highest priority element and the priority bucket it is in.
 
 ####pop_all - O(n)
 pop_all has a O(n) complexity where n is the number of unique
@@ -77,25 +72,24 @@ queue.pop ();
 ```
 
 For the first push the bucket for priorities consisting of three digits
-is first searched for and then when not found created and inserted into
-the digits bucket map. Then the bucket for the priority "400" is 
-searched for and when not found created and inserted into the three 
-digits bucket. Finally "bar" is pushed onto the end of the priority
-"400" bucket.
+is located in the digits bucket vector. Then the bucket for the priority
+"400" is searched for. When it is not found a new bucket is created in 
+the correct place in the priority map. Finally "bar" is pushed onto the
+end of the priority "400" bucket.
 
 For the second push the bucket for priorities consisting of three digits
-is first located (it was created during the first push). Then the bucket
-for the priority "300" is searched for and when not found created in the
-three digits bucket. Finally "foo" is pushed onto the end of the priority
-"300" bucket.
+is first located in the digits vector. Then the bucket for the priority
+"300" is searched for. When not found it is created in the correct place
+in the three digits bucket. Finally "foo" is pushed onto the end of the
+priority "300" bucket.
 
 The pop returns the element with the highest priority which is "foo"
 having a priority of "300". "foo" is cached so retrieving and returning
 it are a constant time operation. Since the priority bucket in which
 "foo" resides is also cached and now empty, it is pruned which is a
 constant time operation. Determining the next highest priority is done by
-grabbing the first digits bucket in the map, then the first priority
-bucket, finally grabbing the first element on the element list.
+searching for the first digits bucket that is not empty then grabbing the
+first priority bucket in it and caching the first element in its list.
 
 examples/priority_queue.cpp
 ---------------------------
@@ -118,25 +112,27 @@ You can run the resultant executab;e with the following command:
 #####output:
 ```
 MinPriorityQueue internal structure:  
-1
-        1
-                1
-2
-        20
-                2a
-                2b
-                2c
-        30
-                3
-        40
-                4
-3
-        500
-                5
-        600
-                6c
-                6a
-                6b
+  digits - 0
+    priority - 1
+      element - 1
+
+  digits - 1
+    priority - 20
+      element - 2a
+      element - 2b
+      element - 2c
+    priority - 30
+      element - 3
+    priority - 40
+      element - 4
+
+  digits - 2
+    priority - 500
+      element - 5
+    priority - 600
+      element - 6c
+      element - 6a
+      element - 6b
 
 Min pop_all:  
 1
@@ -151,25 +147,27 @@ Min pop_all:
 6b
 
 MaxPriorityQueue internal structure:  
-1
-        1
-                1
-2
-        20
-                2a
-                2b
-                2c
-        30
-                3
-        40
-                4
-3
-        500
-                5
-        600
-                6c
-                6a
-                6b
+  digits - 0
+    priority - 1
+      element - 1
+
+  digits - 1
+    priority - 20
+      element - 2a
+      element - 2b
+      element - 2c
+    priority - 30
+      element - 3
+    priority - 40
+      element - 4
+
+  digits - 2
+    priority - 500
+      element - 5
+    priority - 600
+      element - 6c
+      element - 6a
+      element - 6b
 
 Max pop:
 6c
