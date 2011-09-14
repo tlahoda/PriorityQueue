@@ -33,7 +33,7 @@ int main (int argc, char** argv) {
   using namespace std;
   using namespace data;
 
-  MinPriorityQueue<string> minQueue;
+  MinPriorityQueue<string> minQueue (3);
   minQueue.push ("30", "3");
   minQueue.push ("20", "2a");
   minQueue.push ("600", "6c");
@@ -46,15 +46,14 @@ int main (int argc, char** argv) {
   minQueue.push ("600", "6b");
 
   cout << "MinPriorityQueue internal structure:" << endl;
-  minQueue.print ();
-  cout << endl;
+  cout << minQueue << endl << endl;
 
   cout << "Min pop_all:" << endl;
   list<string> flatQueue = minQueue.pop_all ();
   copy (flatQueue.begin (), flatQueue.end (), ostream_iterator<string> (cout, "\n"));
   cout << endl;
 
-  MaxPriorityQueue<string> maxQueue;
+  MaxPriorityQueue<string> maxQueue (3);
   maxQueue.push ("30", "3");
   maxQueue.push ("20", "2a");
   maxQueue.push ("600", "6c");
@@ -67,8 +66,7 @@ int main (int argc, char** argv) {
   maxQueue.push ("600", "6b");
 
   cout << "MaxPriorityQueue internal structure:" << endl;
-  maxQueue.print ();
-  cout << endl;
+  cout << maxQueue << endl << endl;
 
   cout << "Max pop:" << endl;
   while (!maxQueue.empty ())
